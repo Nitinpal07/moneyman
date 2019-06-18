@@ -27,6 +27,7 @@ public class MoneyMan extends ApplicationAdapter {
 	BitmapFont font;
 	int gamestate =0;
 	Texture dizzy;
+	int maxscore=0;
 
 	//creating coin objects
 
@@ -50,12 +51,13 @@ public class MoneyMan extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		background = new Texture("bg.png");
-		man =new Texture[4];
+		background = new Texture("flappy.png");
+		man =new Texture[5];
 		man[0]= new Texture("run1.png");
-        man[1]= new Texture("run4.png");
-        man[2]= new Texture("dizzy1.png");
-        man[3]= new Texture("dead.png");
+        man[1]= new Texture("1_004.png");
+        man[2]= new Texture("1_005.png");
+        man[3]= new Texture("1_006.png");
+        man[4] =new Texture("run4.png");
     many=Gdx.graphics.getHeight()/2;
     dizzy =new Texture("dead.png");
         coin =new Texture("dollar.png");
@@ -63,8 +65,10 @@ public class MoneyMan extends ApplicationAdapter {
         random =new Random();
 
         font =new BitmapFont();
-        font.setColor(Color.GREEN);
-        font.getData().setScale(10);
+        font.setColor(Color.BLACK);
+        font.getData().setScale(4);
+
+
 	}
 
 	public void makeCoin(){
@@ -85,7 +89,10 @@ public class MoneyMan extends ApplicationAdapter {
 	public void render () {
 		batch.begin();
 		batch.draw(background,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+
      if(gamestate==1){
+
+
     //game is live
          if(bombcount<150){
              bombcount++;
@@ -133,7 +140,7 @@ public class MoneyMan extends ApplicationAdapter {
          }
          else {
              pause=0;
-             if (manstate < 2) {
+             if (manstate < 4) {
                  manstate++;
              } else {
                  manstate = 0;
@@ -147,7 +154,7 @@ public class MoneyMan extends ApplicationAdapter {
              many=0;
          }
          if(many>Gdx.graphics.getHeight()){
-             many =Gdx.graphics.getHeight();
+             many =0;
          }
 
 
@@ -198,6 +205,10 @@ public class MoneyMan extends ApplicationAdapter {
             if(Intersector.overlaps(manRectangle,coinRectangles.get(i))){
                 Gdx.app.log("Coin","collision");
                 score++;
+                if(maxscore<score){
+                    maxscore ++;
+                }
+
                 coinRectangles.remove(i);
                 coinXs.remove(i);
                 coinYs.remove(i);
@@ -212,9 +223,11 @@ public class MoneyMan extends ApplicationAdapter {
 
             }
         }
+        font.draw(batch,"score:",50,200);
+        font.draw(batch,"maxscore:",50,100);
 
-        font.draw(batch,String.valueOf(score),100,200);
-
+        font.draw(batch,String.valueOf(score),215,200);
+        font.draw(batch,String.valueOf(maxscore),315,100);
 		batch.end();
 	}
 	
